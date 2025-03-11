@@ -1,5 +1,4 @@
-# models/product.py
-from sqlalchemy import Column, Integer, String, Numeric
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey
 from sqlalchemy.orm import relationship
 from .meta import Base
 

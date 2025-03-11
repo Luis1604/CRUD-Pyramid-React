@@ -1,4 +1,3 @@
-# models/order.py
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from .meta import Base

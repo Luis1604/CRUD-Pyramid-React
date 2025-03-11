@@ -7,8 +7,8 @@ class OrderProduct(Base):
     __tablename__ = 'order_products'
     __table_args__ = {'schema': 'public'}
 
-    order_id = Column(Integer, ForeignKey('public.orders.id'), primary_key=True)
-    product_id = Column(Integer, ForeignKey('public.products.id'), primary_key=True)
+    order_id = Column(Integer, ForeignKey('public.orders.id'), primary_key=True, nullable=False)
+    product_id = Column(Integer, ForeignKey('public.products.id'), primary_key=True, nullable=False)
 
     # Relación con el pedido
     order = relationship("Order", back_populates="products")

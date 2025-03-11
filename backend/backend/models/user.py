@@ -1,4 +1,3 @@
-# models/user.py
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from .meta import Base
@@ -14,12 +13,12 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)  # Almacenar la contraseña encriptada
 
     # Relación con los pedidos
-    orders = relationship("Order", back_populates="user")
+    orders = relationship("Order", back_populates="user", lazy="dynamic")
 
     # Método para verificar si la contraseña ingresada es válida
     def check_password(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.hashed_password.encode('utf-8'))
     
     # Método para establecer la contraseña encriptada
-    def set_password(self, password):
-        self.hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    def set_password(password):
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
