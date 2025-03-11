@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Frontend de eCommerce con React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este repositorio contiene el frontend de un sistema de comercio electrónico construido con React. El frontend está diseñado para interactuar con una API de backend que gestiona usuarios, productos y pedidos. El sistema permite a los usuarios registrarse, iniciar sesión, explorar productos y realizar pedidos.
 
-## Available Scripts
+## Estructura del Proyecto
 
-In the project directory, you can run:
+La estructura de archivos del proyecto sigue las mejores prácticas de React, lo que permite la modularidad y la escalabilidad del código. A continuación se describe la organización del proyecto:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Descripción de las carpetas y archivos:
+- **assets**: Contiene recursos como imágenes e íconos utilizados en la aplicación.
+- **components**: Contiene componentes reutilizables como el encabezado (`Header.js`), pie de página (`Footer.js`) y barra lateral (`Sidebar.js`).
+- **context**: Define los contextos de autenticación (`AuthContext.js`) y tema (`ThemeContext.js`).
+- **hooks**: Contiene hooks personalizados como `useAuth.js` para manejar la autenticación y `useFetch.js` para manejar las peticiones a la API.
+- **pages**: Contiene las páginas de la aplicación, como la página de inicio (`HomePage.js`), sobre nosotros (`AboutPage.js`) y contacto (`ContactPage.js`).
+- **routes**: Gestiona las rutas de la aplicación, configuradas en el archivo `AppRoutes.js`.
+- **services**: Contiene servicios de API como `api.js` y el servicio de autenticación (`authService.js`).
+- **styles**: Archivos CSS globales y de tema como `global.css`, `variables.css` y `theme.css`.
+- **App.js**: El componente principal de la aplicación.
+- **index.js**: El punto de entrada principal para renderizar la aplicación en el DOM.
+- **reportWebVitals.js**: Para medir el rendimiento de la aplicación.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Requisitos previos
 
-### `npm test`
+Antes de comenzar, asegúrate de tener lo siguiente instalado:
+- [Node.js](https://nodejs.org/) (v14 o superior).
+- [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/) (para gestionar dependencias).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Instalación
 
-### `npm run build`
+1. **Clonar el repositorio:**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   Si aún no has clonado el repositorio, usa el siguiente comando:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   ```bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd <DIRECTORIO_DEL_REPOSITORIO>

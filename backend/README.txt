@@ -1,44 +1,74 @@
-Backend
-=======
+# Proyecto de CRUD con Pyramid y SQLAlchemy
 
-Getting Started
----------------
+Este proyecto es una implementación de un sistema de eCommerce usando Pyramid y SQLAlchemy. Incluye un conjunto de modelos de base de datos que gestionan usuarios, productos y pedidos. Este README proporciona una descripción general del proyecto y cómo configurarlo.
 
-- Change directory into your newly created project if not already there. Your
-  current directory should be the same as this README.txt file and setup.py.
+## Estructura del Proyecto
 
-    cd backend
+El proyecto está estructurado para usar Pyramid como framework de backend y SQLAlchemy para manejar la base de datos. La estructura de los modelos refleja un sistema de comercio electrónico básico donde los usuarios pueden realizar pedidos que contienen productos.
 
-- Create a Python virtual environment, if not already created.
+## Modelos
 
-    python3 -m venv env
+El proyecto define varios modelos de base de datos que se utilizan para almacenar información de usuarios, productos y pedidos. Los modelos están implementados en clases de Python y usan SQLAlchemy para mapear las tablas de la base de datos.
 
-- Upgrade packaging tools, if necessary.
+### `User`
+El modelo `User` representa a un usuario en el sistema. Los usuarios tienen un nombre, un correo electrónico y una contraseña encriptada. También se define una relación con los pedidos realizados por el usuario.
 
-    env/bin/pip install --upgrade pip setuptools
+#### Campos:
+- `id`: Identificador único del usuario (clave primaria).
+- `name`: Nombre del usuario.
+- `email`: Correo electrónico único del usuario.
+- `hashed_password`: Contraseña encriptada del usuario.
 
-- Install the project in editable mode with its testing requirements.
+#### Métodos:
+- `check_password(password)`: Verifica si la contraseña proporcionada coincide con la contraseña almacenada.
+- `set_password(password)`: Establece una nueva contraseña encriptada.
 
-    env/bin/pip install -e ".[testing]"
+### `Product`
+El modelo `Product` representa un producto en el sistema. Los productos tienen un nombre, una descripción y un precio.
 
-- Initialize and upgrade the database using Alembic.
+#### Campos:
+- `id`: Identificador único del producto (clave primaria).
+- `name`: Nombre del producto.
+- `description`: Descripción del producto.
+- `price`: Precio del producto.
 
-    - Generate your first revision.
+#### Relaciones:
+- Se establece una relación con los productos a través de la tabla intermedia `order_products`.
 
-        env/bin/alembic -c development.ini revision --autogenerate -m "init"
+### `Order`
+El modelo `Order` representa un pedido realizado por un usuario. Los pedidos están asociados a un usuario a través de la clave foránea `user_id`. Además, están relacionados con los productos a través de la tabla `order_products`.
 
-    - Upgrade to that revision.
+#### Campos:
+- `id`: Identificador único del pedido (clave primaria).
+- `user_id`: Identificador del usuario que realizó el pedido (clave foránea hacia `users`).
+  
+#### Relaciones:
+- Relación con `User`: Cada pedido está asociado con un usuario que lo realizó.
+- Relación con `OrderProduct`: Los productos del pedido están asociados a través de la tabla `order_products`.
 
-        env/bin/alembic -c development.ini upgrade head
+### `OrderProduct`
+El modelo `OrderProduct` es una tabla intermedia entre los modelos `Order` y `Product`. Esta tabla maneja la relación muchos a muchos entre pedidos y productos.
 
-- Load default data into the database using a script.
+#### Campos:
+- `order_id`: Identificador del pedido (clave foránea hacia `orders`).
+- `product_id`: Identificador del producto (clave foránea hacia `products`).
 
-    env/bin/initialize_backend_db development.ini
+#### Relaciones:
+- Relación con `Order`: Cada entrada en `order_products` está asociada con un pedido.
+- Relación con `Product`: Cada entrada en `order_products` está asociada con un producto.
 
-- Run your project's tests.
+## Instalación
 
-    env/bin/pytest
+Para ejecutar este proyecto en tu máquina local, sigue los siguientes pasos:
 
-- Run your project.
+### Requisitos previos:
+- Python 3.10+.
+- PostgreSQL o cualquier otra base de datos compatible con SQLAlchemy.
 
-    env/bin/pserve development.ini
+### Pasos de instalación:
+
+1. **Clonar el repositorio:**
+
+   ```bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd <DIRECTORIO_DEL_REPOSITORIO>
