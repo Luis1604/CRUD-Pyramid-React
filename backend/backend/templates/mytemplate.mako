@@ -1,5 +1,5 @@
 <%inherit file="layout.mako"/>
 <div class="content">
-  <h1><span class="font-semi-bold">Pyramid</span> <span class="smaller">Starter project</span></h1>
-  <p class="lead">Welcome to <span class="font-normal">${project}</span>, a&nbsp;Pyramid application generated&nbsp;by<br><span class="font-normal">Cookiecutter</span>.</p>
+  <h1><span class="font-semi-bold">CRUD</span> <span class="smaller">Gestión Backend</span></h1>
+  <p class="lead">Bienvenido <span class="font-normal">${project}</span>, &nbsp;Aplicacion &nbsp;para un<br><span class="font-normal">CRUD</span>.</p>
 </div>

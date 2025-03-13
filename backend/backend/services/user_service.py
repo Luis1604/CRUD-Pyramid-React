@@ -8,6 +8,7 @@ def create_user(db: Session, name: str, email: str, password_hash: str):
      # Verificar si el usuario ya existe
     usuario_existente = db.query(User).filter(User.email == email).first()
     if usuario_existente:
+        print("Usuario ya existe")
         return {"error": "El email ya está en uso"}
     
     user = User(
@@ -17,8 +18,9 @@ def create_user(db: Session, name: str, email: str, password_hash: str):
     )
     db.add(user)
     try:
-        transaction.manager.commit() 
-        return user
+        transaction.manager.commit()
+        print("Usuario Creado: ", user.name)
+        return user.name
     except IntegrityError:
         transaction.manager.abort()
         return {"error": "El email ya está en uso"}

@@ -1,0 +1,63 @@
+/* Fondo con degradado */
+.homepage-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #3b82f6, #6d28d9);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Contenedor principal */
+.homepage-content {
+    max-width: 600px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Título */
+.homepage-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Descripción */
+.homepage-description {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+/* Botón */
+.homepage-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: white;
+    color: #3b82f6;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.homepage-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Footer */
+.homepage-footer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}

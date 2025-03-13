@@ -1,11 +1,20 @@
 from pyramid.config import Configurator 
+from backend.views import options_view
+import logging
+
+# Configura el logger
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
 
 def includeme(config):
     # Rutas de la API
     config.add_route('home', '/')
+    
+    # Manejo de solicitudes OPTIONS para CORS
+    config.add_route('options', '*path', request_method='OPTIONS')
 
     # Agregar rutas para login
-    config.add_route('login', '/login')
+    config.add_route('login', '/api/login')
     
     # Usuarios
     config.add_route('listusers', '/api/listusers')
@@ -20,6 +29,6 @@ def includeme(config):
     # Órdenes
     config.add_route('orders', '/api/orders')
     config.add_route('order', '/api/orders/{id}')
-    
-    # Manejo de solicitudes OPTIONS para CORS
-    config.add_route('options', '*path', request_method='OPTIONS')
+
+
+    config.add_view(options_view.options_view, route_name='options', renderer='json')

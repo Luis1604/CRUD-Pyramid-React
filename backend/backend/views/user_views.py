@@ -3,6 +3,7 @@ from pyramid.response import Response
 from sqlalchemy.orm import Session
 from backend.services.user_service import create_user, get_user_by_id, get_all_users, delete_user
 from pyramid.request import Request
+import json
 
 
 # Listar todos los usuarios
@@ -19,7 +20,12 @@ def get_user(request: Request):
     user_id = request.matchdict['id']
     user = get_user_by_id(db, user_id)
     if user:
-        return {'user': {'id': user.id, 'name': user.name, 'email': user.email}}
+        print("Usuario creado: ",user.name)
+        return Response(
+            body=json.dumps({'id': user['id'], 'name': user['name'], 'email': user['email']}), 
+            content_type='application/json',
+            status=200
+        )
     return Response(status=404)
 
 # Crear un nuevo usuario
@@ -28,11 +34,26 @@ def create_user_view(request: Request):
     db = request.dbsession
     name = request.json_body.get('name')
     email = request.json_body.get('email')
-    password_hash = request.json_body.get('password')  # Encriptar la contraseña
+    password_hash = request.json_body.get('password')
 
-    user = create_user(db, name, email, password_hash)
-    return {'user': {'id': user.id, 'name': user.name, 'email': user.email}}
+    newuser = create_user(db, name, email, password_hash)
+    print("Usuario creado respuesta:", newuser, "Tipo:", type(newuser))
 
+    # Si es un diccionario, significa que hubo un error
+    if isinstance(newuser, dict) and "error" in newuser:
+        print("Error en el json")
+        return Response(
+            body=json.dumps(newuser), 
+            content_type='application/json',
+            status=400  # Bad Request si hay un error
+        )
+
+    print("JSON respuesta:", newuser)
+    return Response(
+        body=json.dumps({'message': 'Usuario registrado con éxito', 'name': newuser}),
+        content_type='application/json; charset=utf-8',  # Aquí agregamos charset=utf-8
+        status=200  # Aseguramos que sea 200 OK
+    )
 
 
 # Eliminar un usuario por ID
