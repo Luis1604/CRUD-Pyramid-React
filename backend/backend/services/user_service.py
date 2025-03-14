@@ -19,11 +19,10 @@ def create_user(db: Session, name: str, email: str, password_hash: str):
     db.add(user)
     try:
         transaction.manager.commit()
-        print("Usuario Creado: ", user.name)
-        return user.name
+        return True
     except IntegrityError:
         transaction.manager.abort()
-        return {"error": "El email ya está en uso"}
+        return None
     
 
 def get_user_by_id(db: Session, user_id: int):

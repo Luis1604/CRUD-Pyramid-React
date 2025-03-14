@@ -23,11 +23,11 @@ export const logout = () => {
 // Función para iniciar sesión
 export const login = async (email, password) => {
     try {
-        const response = await api.post("/api/login", { email, password });
-        console.log("Token pedido");
-        saveToken(response.data.token);
-        return response.data;
+        const { data } = await api.post("/api/login", { email, password });
+        saveToken(data.token);
+        return data;
     } catch (error) {
+        console.error("Error en login:", error);
         throw error.response?.data || { error: "Error al iniciar sesión" };
     }
 };

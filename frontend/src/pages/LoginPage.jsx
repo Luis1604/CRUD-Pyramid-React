@@ -9,24 +9,26 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(""); // Limpiar error anterior
-
+        setError("");
+        setIsLoading(true);
         try {
-            login(email, password);
-            navigate("/admin"); // Redirigir tras login exitoso
+            await login(email, password);
+            navigate("/admin");
         } catch (error) {
-            setError(error.error || "Error al iniciar sesión.");
+            setError(error?.error || "Error al iniciar sesión.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <div className="login-container">
             <div className="login-box">
-                <h2>Iniciar Sesión</h2>
+                <h2 className="h2">Iniciar Sesión</h2>
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleLogin}>
                     {/* Input de Email */}
@@ -61,7 +63,9 @@ const LoginPage = () => {
                         </span>
                     </div>
 
-                    <button type="submit">Ingresar</button>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? "Cargando..." : "Ingresar"}
+                    </button>
                 </form>
             </div>
         </div>

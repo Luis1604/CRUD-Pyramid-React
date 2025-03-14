@@ -4,6 +4,9 @@ import datetime
 from backend.models.user import User
 from sqlalchemy.orm import Session
 from pyramid.threadlocal import get_current_registry
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Obtener los valores de configuración del archivo INI
 def get_jwt_config():
@@ -37,10 +40,26 @@ def get_user_by_email(db: Session, email: str) -> User:
 
 # Función para iniciar sesión
 def login_user(db: Session, email: str, password: str):
+    """
+    Función para autenticar un usuario y generar un token si las credenciales son correctas.
+    """
     user = get_user_by_email(db, email)
-    if user and verify_password(user.hashed_password, password):  # Asegúrate de que el nombre del campo sea correcto
-        token = create_token(user)  # Si el usuario es válido, crea el token
-        return token
-    else:
-        print("Email o contraseña incorrectos")
-        return None  # Si no se encuentra el usuario o la contraseña no es válida, devuelve None
+    if not user:
+        logger.warning(f"Usuario no encontrado: {email}")
+        return None
+
+    if not verify_password(user.hashed_password, password):
+        logger.warning(f"Contraseña incorrecta para usuario: {email}")
+        return None
+
+    token = create_token(user)
+    logger.info(f"Token generado correctamente para {email}")
+    return token
+
+def verify_jwt(token):
+    config = get_current_registry().settings
+    jwt_secret_key = config.get('JWT_SECRET_KEY')
+    try:
+        return jwt.decode(token, jwt_secret_key, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        return None

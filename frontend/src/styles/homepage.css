@@ -54,6 +54,16 @@
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
+.google-button {
+    background: linear-gradient(135deg, #4285F4, #EA4335, #FBBC05, #34A853);
+    color: white;
+    margin-top: 10px;
+}
+
+.google-button:hover {
+    background: linear-gradient(135deg, #4285F4, #34A853);
+}
+
 /* Footer */
 .homepage-footer {
     position: absolute;

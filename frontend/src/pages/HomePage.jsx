@@ -17,9 +17,21 @@ const HomePage = () => {
                 >
                     Iniciar Sesión
                 </button>
+                <button 
+                    onClick={() => navigate("/registerg")} 
+                    className="homepage-button google-button"
+                >
+                    Registrarse con Google
+                </button>
+                <button 
+                    onClick={() => navigate("/loging")} 
+                    className="homepage-button google-button"
+                >
+                    Iniciar sesión con Google
+                </button>
             </div>
             <div className="homepage-footer">
-                &copy; {new Date().getFullYear()} Academico. Todos los derechos reservados.
+                &copy; {new Date().getFullYear()} CRUD. Todos los derechos reservados.
             </div>
         </div>
     );

@@ -14,7 +14,11 @@ def includeme(config):
     config.add_route('options', '*path', request_method='OPTIONS')
 
     # Agregar rutas para login
-    config.add_route('login', '/api/login')
+    config.add_route('login', '/api/login') 
+    config.add_route('auth_google', '/api/auth_google') 
+
+    # Validacion de toke
+    config.add_route('dashboard', '/api/dashboard') 
     
     # Usuarios
     config.add_route('listusers', '/api/listusers')
