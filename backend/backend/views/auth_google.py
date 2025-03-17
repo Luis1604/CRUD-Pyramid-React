@@ -37,6 +37,7 @@ def auth_google(request):
             logger.warning("Token no es de Google")
             response_data = {"error": "Token inválido", "success": False}
             status_code = 401
+            return create_response(response_data, status_code)
 
         # Extraer datos del usuario
         user_sub = idinfo["sub"]  # ID único de Google
@@ -74,8 +75,6 @@ def auth_google(request):
                 response_data = {
                     "message": "Login por dos factores requerido",
                     "success": True,
-                    "email": user_email,
-                    "name": user_name,
                     "otp_required": True
                 }
                 status_code = 200
