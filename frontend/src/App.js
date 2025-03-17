@@ -7,6 +7,7 @@ import OrdersPage from "./pages/OrdersPage";
 import AdminPage from "./pages/AdminPage";
 import LoginGooglePage from "./pages/LoginGooglePage";
 import RegisterGooglePage from "./pages/RegisterGooglePage";
+import SessionPage from "./pages/SessionPage";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/orders" element={<OrdersPage />} />
                     <Route path="/loging" element={<LoginGooglePage />} />
                     <Route path="/registerg" element={<RegisterGooglePage />} />
+                    <Route path="/sessions" element={<SessionPage/>} />
                 </Routes>
             </Router>
         </AuthProvider>

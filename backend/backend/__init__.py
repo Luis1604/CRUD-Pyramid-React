@@ -13,5 +13,6 @@ def main(global_config, **settings):
         config.include('.routes')
         config.include('.models') 
         config.include('pyramid_debugtoolbar')
+        config.include('cornice')
         config.scan()
     return config.make_wsgi_app()

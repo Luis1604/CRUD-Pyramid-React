@@ -7,7 +7,8 @@ const AdminPage = () => {
     const options = [
         { path: "/register", label: "Crear Usuario", icon: "👤" },
         { path: "/create-product", label: "Crear Producto", icon: "📦" },
-        { path: "/create-order", label: "Crear Orden", icon: "🛒" }
+        { path: "/create-order", label: "Crear Orden", icon: "🛒" },
+        { path: "/sessions", label: "Listado de sesiones", icon: "🔒" }
     ];
 
     return (

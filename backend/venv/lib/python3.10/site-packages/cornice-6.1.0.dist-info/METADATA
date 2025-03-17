@@ -1,0 +1,152 @@
+Metadata-Version: 2.1
+Name: cornice
+Version: 6.1.0
+Summary: Define Web Services in Pyramid.
+Author-email: Mozilla Services <services-dev@mozilla.org>
+License: This Source Code Form is subject to the terms of the Mozilla Public License, v.
+        2.0. If a copy of the MPL was not distributed with this file, You can obtain
+        one at http://mozilla.org/MPL/2.0/.
+        
+        
+Project-URL: Repository, https://github.com/Cornices/cornice
+Keywords: web pyramid pylons
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+Classifier: Framework :: Pylons
+Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: pyramid <3,>=1.7
+Provides-Extra: dev
+Requires-Dist: ruff ; extra == 'dev'
+Requires-Dist: pytest <9 ; extra == 'dev'
+Requires-Dist: pytest-cache <2 ; extra == 'dev'
+Requires-Dist: pytest-cov <5 ; extra == 'dev'
+Requires-Dist: WebTest <4 ; extra == 'dev'
+Requires-Dist: marshmallow <4 ; extra == 'dev'
+Requires-Dist: colander <3 ; extra == 'dev'
+
+=======
+Cornice
+=======
+
+|readthedocs| |pypi| |github-actions| |main-coverage|
+
+.. |github-actions| image:: https://github.com/Cornices/cornice/workflows/Unit%20Testing/badge.svg
+    :target: https://github.com/Cornices/cornice/actions?query=workflow%3A%22Unit+Testing%22
+
+.. |readthedocs| image:: https://readthedocs.org/projects/cornice/badge/?version=latest
+    :target: https://cornice.readthedocs.io/en/latest/
+    :alt: Documentation Status
+
+.. |main-coverage| image::
+    https://coveralls.io/repos/Cornices/cornice/badge.svg?branch=main
+    :alt: Coverage
+    :target: https://coveralls.io/r/Cornices/cornice
+
+.. |pypi| image:: https://img.shields.io/pypi/v/cornice.svg
+    :target: https://pypi.python.org/pypi/cornice
+
+
+**Cornice** provides helpers to build & document Web Services with Pyramid.
+
+The full documentation is available at: https://cornice.readthedocs.io
+
+Here is a (alphabetically-ordered) list of the people who contributed to
+Cornice:
+
+* Akim Sadaoui <akim.sadaoui@arkena.com>
+* Alessandro Amici <alexamici@gmail.com>
+* Alexandre Bourget <alex@bourget.cc>
+* Alexis Metaireau <alexis@notmyidea.org>
+* Alex Marandon <contact@alexmarandon.com>
+* Anaël Beutot <abeutot@oserror.org>
+* Andilab <andrzej.kostanski@gmail.com>
+* Andreas Motl <github.amo@netfrag.org>
+* Andreas Zeidler <andi@pyfidelity.com>
+* Andre Caron <andre.l.caron@gmail.com>
+* Andrew Brookins <a.m.brookins@gmail.com>
+* Antoine Leclair <antoineleclair@gmail.com>
+* Anton D <anton@screwtop>
+* Areski <areski@gmail.com>
+* Ben Bangert <ben@groovie.org>
+* Andrew Birnberg
+* Bruno Binet <bruno.binet@gmail.com>
+* Bryan Zegar <bryanzegar@gmail.com>
+* Christian Benke <benkokakao@gmail.com>
+* Christian Thieme <christian.thieme@celeraone.com>
+* Damian Dimmich <damian@tauri-tec.com>
+* Daniel M. Weeks <dan@danweeks.net>
+* David Charboneau <david@thecharboneaus.net>
+* David Grant <seizethedave@gmail.com>
+* Dion Peters <petersdion@gmail.com>
+* Elias <elias@stupeflix.com>
+* Gabriela Surita <gsurita@mozilla.com>
+* Gael Pasgrimaud <gael@gawel.org>
+* George V. Reilly <george@reilly.org>
+* George Mamalakis <mamalos@gmail.com>
+* Graham Higgins <gjh-github@bel-epa.com>
+* G.Tjebbes <g.t@majerti.fr>
+* Guillaume Gauvrit <guillaume@gandi.net>
+* Henddher Pedroza <henddher.pedroza@gmail.com>
+* James Arthur <thruflo@gmail.com>
+* James Saxon <james@saxon.com>
+* Janek Hiis <janek@utopic.me>
+* Jeff Dairiki <dairiki@dairiki.org>
+* Jeff Marshall <jeff@classy.co>
+* Jens Carl <jc.github@jens-carl.de>
+* Joe Steeve <js@hipro.co.in>
+* John Brodie <john.brodie@nextiva.com>
+* Jon Staley <jon.staley@fundingoptions.com>
+* Joshua Immanuel <josh@hipro.co.in>
+* Josip Delic <delijati@googlemail.com>
+* Jürgen Gmach <juergen.gmach@googlemail.com>
+* Karthikeyan Singaravelan <tir.karthi@gmail.com>
+* Kit Randel <kit@nocturne.net.nz>
+* Laurence Rowe <laurence@lrowe.co.uk>
+* Lorenzo Gil Sanchez <lorenzo.gil.sanchez@gmail.com>
+* Lucas Taylor <ltaylor.volks@gmail.com>
+* Luke Macken <lmacken@redhat.com>
+* Luper Rouch <luper.rouch@gmail.com>
+* Marc Abramowitz <marca@surveymonkey.com>
+* Marcin Lulek <info@webreactor.eu>
+* Marconi Moreto <caketoad@gmail.com>
+* Markus Zapke-Gründemann <markus@keimlink.de>
+* Mathieu Bridon <bochecha@fedoraproject.org>
+* Mathieu Leplatre <mathieu@mozilla.com>
+* Matthias Lehmann <ml@lalisio.com>
+* Matthias <matthias@itemfire.com>
+* Matt Skinner <skinner.m.c@gmail.com>
+* Myroslav Opyr <myroslav@quintagroup.com>
+* Nicolas Dietrich <nicodietrich@gmail.com>
+* Niko Wenselowski <niko@nerdno.de>
+* Olivier Roussy <olivier@gandi.net>
+* Paul Smith <paulsmith@pobox.com>
+* Ralph Bean <rbean@redhat.com>
+* Ramana Rao <treerao@gmail.com>
+* Rémy HUBSCHER <rhubscher@mozilla.com>
+* rforkel <rforkel@rforkel-ubuntu.gulp.biz>
+* Rickert Mulder <circlingthesun@gmail.com>
+* Rob Miller <rob@kalistra.com>
+* Rob van der Linde <robvdl@gmail.com>
+* Roman Kozlovskyi <kroman0@users.noreply.github.com>
+* Ryan Kelly <ryan@rfk.id.au>
+* Scott Bowers <sbbowers@gmail.com>
+* Sebastian Hanula <sebastian.hanula@gmail.com>
+* Sergey Safonov <spoof@spoofa.info>
+* sghill <steve@sghill.net>
+* Simone Marzola <marzolasimone@gmail.com>
+* Tarek Ziade <tarek@ziade.org>
+* Tim Tisdall <tisdall@gmail.com>
+* Tom Lazar <tomster@pyfidelity.com>
+* Tomasz Czekański <t.czekanski@gmail.com>
+* Tres Seaver <tseaver@palladion.com>
+* tsauerwein <tobias.sauerwein@camptocamp.com>
+* Victor Ng <crankycoder@gmail.com>
+* Vincent Fretin <vincent.fretin@gmail.com>
+* Ymage <o2heltem@gmail.com>
+* Volodymyr Maksymiv <vmaksymiv@quintagroup.com>
+* Walter Danilo Galante <walterdangalante@gmail.com>

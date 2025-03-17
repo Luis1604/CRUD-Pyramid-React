@@ -14,6 +14,17 @@ def dashboard(request):
     user_data = verify_jwt(token)
 
     if not user_data:
-        return Response(json.dumps({"error": "Token inválido o expirado"}), status=401)
+        return create_response({"error": "Token inválido o expirado"}, 401)
 
-    return {"message": f"Bienvenido, {user_data['name']}!"}
+    return create_response({"message": f"Bienvenido, {user_data['name']}!"}, 200)
+
+def create_response(data, status_code):
+    """ Genera una respuesta JSON con las cabeceras adecuadas """
+    response = Response(json.dumps(data), content_type="application/json; charset=utf-8", status=status_code)
+    response.headers.update({
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Credentials": "true"
+    })
+    return response
