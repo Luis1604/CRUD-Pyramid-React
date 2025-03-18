@@ -10,7 +10,6 @@ from .user import User
 from .order import Order
 from .product import Product
 from .order_product import OrderProduct
-from .user_ext import User_ext
 
 # Run ``configure_mappers`` after defining all of the models to ensure
 # all relationships can be setup.
@@ -28,7 +27,60 @@ def get_session_factory(engine):
 
 
 def get_tm_session(session_factory, transaction_manager, request=None):
+    """
+    Get a ``sqlalchemy.orm.Session`` instance backed by a transaction.
 
+    This function will hook the session to the transaction manager which
+    will take care of committing any changes.
+
+    - When using pyramid_tm it will automatically be committed or aborted
+      depending on whether an exception is raised.
+
+    - When using scripts you should wrap the session in a manager yourself.
+      For example:
+
+      .. code-block:: python
+
+          import transaction
+
+          engine = get_engine(settings)
+          session_factory = get_session_factory(engine)
+          with transaction.manager:
+              dbsession = get_tm_session(session_factory, transaction.manager)
+
+    This function may be invoked with a ``request`` kwarg, such as when invoked
+    by the reified ``.dbsession`` Pyramid request attribute which is configured
+    via the ``includeme`` function below. The default value, for backwards
+    compatibility, is ``None``.
+
+    The ``request`` kwarg is used to populate the ``sqlalchemy.orm.Session``'s
+    "info" dict.  The "info" dict is the official namespace for developers to
+    stash session-specific information.  For more information, please see the
+    SQLAlchemy docs:
+    https://docs.sqlalchemy.org/en/stable/orm/session_api.html#sqlalchemy.orm.session.Session.params.info
+
+    By placing the active ``request`` in the "info" dict, developers will be
+    able to access the active Pyramid request from an instance of an SQLAlchemy
+    object in one of two ways:
+
+    - Classic SQLAlchemy. This uses the ``Session``'s utility class method:
+
+      .. code-block:: python
+
+          from sqlalchemy.orm.session import Session as sa_Session
+
+          dbsession = sa_Session.object_session(dbObject)
+          request = dbsession.info["request"]
+
+    - Modern SQLAlchemy. This uses the "Runtime Inspection API":
+
+      .. code-block:: python
+
+          from sqlalchemy import inspect as sa_inspect
+
+          dbsession = sa_inspect(dbObject).session
+          request = dbsession.info["request"]
+    """
     dbsession = session_factory(info={"request": request})
     zope.sqlalchemy.register(
         dbsession, transaction_manager=transaction_manager
@@ -37,7 +89,12 @@ def get_tm_session(session_factory, transaction_manager, request=None):
 
 
 def includeme(config):
+    """
+    Initialize the model for a Pyramid app.
 
+    Activate this setup using ``config.include('backend.models')``.
+
+    """
     settings = config.get_settings()
     settings['tm.manager_hook'] = 'pyramid_tm.explicit_manager'
 
