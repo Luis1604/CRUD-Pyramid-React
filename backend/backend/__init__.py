@@ -12,5 +12,6 @@ def main(global_config, **settings):
         config.include('pyramid_mako')  
         config.include('.routes')
         config.include('.models') 
+        config.include('pyramid_debugtoolbar')
         config.scan()
     return config.make_wsgi_app()
