@@ -19,14 +19,15 @@ GOOGLE_CLIENT_ID = "223506677250-er5uug0l0i40cmpei06oevnvn5s6724i.apps.googleuse
 def auth_google(request):
     bd = request.dbsession
     logger.info("Solicitud de inicio de sesión con Google")
-
     try:
         data = request.json_body
         token = data.get("token")
         otp_code = data.get("otp_code")
 
         if not token:
-            return create_response({"error": "Token no recibido", "success": False}, 400)
+            response_data = {"error": "Token no recibido", "success": False}
+            status_code = 400
+            return create_response(response_data, status_code)
 
         # Verificar el token de Google
         idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), GOOGLE_CLIENT_ID)
@@ -34,7 +35,9 @@ def auth_google(request):
         # Verificar que el token es de Google
         if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
             logger.warning("Token no es de Google")
-            return create_response({"error": "Token inválido", "success": False}, 401)
+            response_data = {"error": "Token inválido", "success": False}
+            status_code = 401
+            return create_response(response_data, status_code)
 
         # Extraer datos del usuario
         user_sub = idinfo["sub"]  # ID único de Google
@@ -56,44 +59,53 @@ def auth_google(request):
             except IntegrityError:
                 logger.error("Error al guardar el usuario en la base de datos", exc_info=True)
                 transaction.manager.abort()
-                return create_response({"error": "Error al guardar el usuario", "success": False}, 401)
+                response_data = {"error": "Error al guardar el usuario", "success": False}
+                status_code = 401
+                return create_response(response_data, status_code)
 
         # Si el usuario tiene 2FA activado, validar el código OTP
+        logger.info(f"Usuario requiere 2fa {user.is_2fa_enabled}")
         if user.is_2fa_enabled:
             totp = pyotp.TOTP(user.otp_secret)
             expected_otp = totp.now()
-            logger.info(f"Código OTP esperado para {user_email}: {expected_otp}")  # Luego se debe enviar este código al usuario por otro medio
+            logger.info(f"Código OTP esperado para {user_email}: {expected_otp}") #Luego se debe enviar este codigo al usuario por otro medio
 
             if not otp_code:
-                return create_response({
+                logger.info(f"Usuario {otp_code}")
+                response_data = {
                     "message": "Login por dos factores requerido",
                     "success": True,
                     "otp_required": True
-                }, 200)
-
+                }
+                status_code = 200
+                return create_response(response_data, status_code)
+            
             if not totp.verify(int(otp_code), valid_window=1):
-                logger.warning("Código 2FA inválido")
-                return create_response({"error": "Código 2FA inválido", "success": False}, 401)
+                logger.warning("Código 2FA inválido")                    
+                response_data = {"error": "Código 2FA inválido", "success": False}
+                status_code = 401
+                return create_response(response_data, status_code)
 
         # Generar token
         session_token = create_token(user)
         logger.info(f"Token generado para {user_email}, {session_token}")
-
-        return create_response({
+        response_data = {
             "message": "Login exitoso",
             "success": True,
             "token": session_token,
             "email": user_email,
             "name": user_name,
-        }, 200)
+        }
+        status_code = 200
+
+        return create_response(response_data, status_code)
 
     except ValueError:
         logger.warning("Token de Google inválido")
-        return create_response({"error": "Token inválido o expirado", "success": False}, 401)
-
+        create_response({"error":  "Token inválido o expirado"}, 401)  
     except Exception as e:
         logger.exception("Error inesperado en auth_google")
-        return create_response({"error": str(e), "success": False}, 500)
+        create_response({"error": str(e)}, 500)     
 
 
 def create_response(data, status_code):
