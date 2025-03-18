@@ -1,4 +1,5 @@
 import json
+import requests
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from pyramid.view import view_config
@@ -33,7 +34,6 @@ def auth_google(request):
             logger.warning("Token no es de Google")
             response_data = {"error": "Token inválido", "success": False}
             status_code = 401
-            return create_response(response_data, status_code)
 
         # Extraer datos del usuario
         user_sub = idinfo["sub"]  # ID único de Google
@@ -57,7 +57,6 @@ def auth_google(request):
                 transaction.manager.abort()
                 response_data = {"error": "Error al guardar el usuario", "success": False}
                 status_code = 401
-                return create_response(response_data, status_code)
 
         # Generar token
         session_token = create_token(user)
@@ -75,22 +74,18 @@ def auth_google(request):
         logger.warning("Token de Google inválido")
         response_data = {"error": "Token inválido o expirado", "success": False}
         status_code = 401
-        return create_response(response_data, status_code)
     except Exception as e:
         logger.exception("Error inesperado en auth_google")
         response_data = {"error": str(e), "success": False}
         status_code = 500
-        return create_response(response_data, status_code)
 
-
-    return create_response(response_data, status_code)
-
-def create_response(data, status_code):
-    response = Response(json.dumps(data), content_type="application/json; charset=utf-8", status=status_code)
+    response = Response(json.dumps(response_data), content_type="application/json; charset=utf-8", status=status_code)
     response.headers.update({
         "Access-Control-Allow-Origin": "http://localhost:3000",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
         "Access-Control-Allow-Credentials": "true"
     })
+
     return response
+
