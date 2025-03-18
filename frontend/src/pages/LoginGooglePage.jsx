@@ -1,33 +1,44 @@
+import React, { useContext, useEffect, useCallback } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/login.css";
+import { AuthContext } from "../context/AuthContext";
 
 const clientId = "223506677250-er5uug0l0i40cmpei06oevnvn5s6724i.apps.googleusercontent.com";
 
 const LoginGooglePage = () => {
+    const { login, vrfToken } = useContext(AuthContext);
     const navigate = useNavigate();
     const [otpRequired, setOtpRequired] = useState(false);
     const [otpCode, setOtpCode] = useState("");
     const [userToken, setUserToken] = useState(""); // Token de Google almacenado temporalmente
 
-    const handleSuccess = async (response) => {
+    // Redirigir si el usuario ya está autenticado
+    useEffect(() => {
+        if (vrfToken()) {
+            console.log("Usuario autenticado con Google, redirigiendo...");
+            navigate("/admin");
+        }
+    }, [vrfToken, navigate]);
+
+    // Manejo de éxito en autenticación con Google
+    const handleSuccess = useCallback(async (response) => {
         const idToken = response.credential;
-        setUserToken(idToken);
 
         try {
             // Enviar el token de Google al backend
             console.warn("Enviando token de Google al backend...");
+            setUserToken(idToken);
             const res = await fetch("http://localhost:6543/api/auth_google", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token: idToken }),
-                mode: "cors", 
+                mode: "cors",
                 credentials: "include",
             });
 
+            if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
             if (!res.ok) {
                 console.error("Error en la respuesta del backend:", res.statusText);
                 throw new Error(`Error ${res.status}: ${res.statusText}`);
@@ -35,14 +46,14 @@ const LoginGooglePage = () => {
 
             const data = await res.json();
 
-            if (data.success) {
+            if (data.success) {             
                 if (data.otp_required) {
                     // Si el usuario tiene activado 2FA, pedir OTP
                     setOtpRequired(true);
                 } else {
                     // Si no requiere OTP, iniciar sesión normalmente
                     localStorage.setItem("token", data.token);
-                    console.log("Login exitoso. Redirigiendo al dashboard...");
+                    console.log("Login con Google exitoso. Redirigiendo...");
                     navigate("/admin");
                 }
             } else {
@@ -51,7 +62,9 @@ const LoginGooglePage = () => {
         } catch (error) {
             console.error("Error en la autenticación con Google:", error);
         }
-    };
+    }, [login, navigate]);
+
+    const handleFailure = () => console.log("Error al iniciar sesión con Google");
 
     const handleOtpSubmit = async (response) => {
         if (otpCode.trim()==="") {  
@@ -96,7 +109,7 @@ const LoginGooglePage = () => {
                 <form>
                     {!otpRequired ? (
                         <GoogleOAuthProvider clientId={clientId}>
-                            <GoogleLogin onSuccess={handleSuccess} onError={() => console.log("Error al iniciar sesión con Google")} useOneTap />
+                            <GoogleLogin onSuccess={handleSuccess} onError={handleFailure} useOneTap />
                         </GoogleOAuthProvider>
                     ) : (
                         <div>

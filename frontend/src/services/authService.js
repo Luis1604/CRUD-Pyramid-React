@@ -21,15 +21,26 @@ export const logout = () => {
 };
 
 // Función para iniciar sesión
-export const login = async (email, password) => {
-    try {
-        const { data } = await api.post("/api/login", { email, password });
+export const login_ = async (mail, pass) => {
+    console.log("Enviando solicitud a login:", { mail, pass });
+    const res = await fetch("http://localhost:6543/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email:mail, password:pass}),
+        mode: "cors",
+    });
+    console.log("Datos recibidos");
+    const data = await res.json();
+    if (data.success) {
+        localStorage.setItem("token", data.token);
         saveToken(data.token);
+        console.log("Sesión iniciada:");
         return data;
-    } catch (error) {
-        console.error("Error en login:", error);
-        throw error.response?.data || { error: "Error al iniciar sesión" };
+    }else{
+        console.error("Error en el token recibido", data.error)
+        return data;
     }
+        
 };
 
 // Función para registrar un nuevo usuario
