@@ -1,7 +1,9 @@
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { registerUser } from "../services/authService";
 import "../styles/register.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
     const [name, setName] = useState("");
@@ -11,6 +13,18 @@ const RegisterPage = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [formErrors, setFormErrors] = useState({});
+    const { vrfToken } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    // Verifica la autenticación
+    useEffect(() => {
+        if (!vrfToken()) {
+            console.log("Usuario no autenticado, redirigiendo...");
+            navigate("/");
+        } else {
+            console.log("Usuario autenticado en RegisterPage");
+        }
+    }, [vrfToken, navigate]);
 
     const validateForm = () => {
         let errors = {};
@@ -41,11 +55,17 @@ const RegisterPage = () => {
 
         try {
             const response = await registerUser(name.trim(), email.trim(), password);
-            setSuccess("Usuario ",response.name," registrado con éxito.");
-            setName("");
-            setEmail("");
-            setPassword("");
-            setFormErrors({});
+            if (!response.success) {
+                return setError(response.error || "Error al registrar usuario.");
+            }else{
+                console.log("Usuario registrado vista RegisterPage:");
+                setSuccess("Usuario registrado con éxito.");
+                setName("");
+                setEmail("");
+                setPassword("");
+                setFormErrors({});
+            }
+            
         } catch (error) {
             setError(error.error || "Error al registrar usuario.");
         }
@@ -75,6 +95,7 @@ const RegisterPage = () => {
                             type="email"
                             id="email"
                             placeholder="Correo electrónico"
+                            autoComplete="username"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -104,9 +125,15 @@ const RegisterPage = () => {
                         {formErrors.password && <span className="error-message">{formErrors.password}</span>}
                     </div>
 
-                    <button type="submit" disabled={Object.keys(formErrors).length > 0}>
-                        Registrarse
-                    </button>
+                    <div className="button-group">
+                        <button type="submit" disabled={Object.keys(formErrors).length > 0}>
+                            Registrarse
+                        </button>
+                        
+                        <button type="button" onClick={() => navigate("/admin")}>
+                            Regresar
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

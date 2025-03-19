@@ -18,7 +18,7 @@ const HomePage = () => {
                     Iniciar Sesión
                 </button>
                 <button 
-                    onClick={() => navigate("/registerg")} 
+                    onClick={() => navigate("/loging")} 
                     className="homepage-button google-button"
                 >
                     Registrarse con Google

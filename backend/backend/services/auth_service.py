@@ -5,6 +5,7 @@ from backend.models.user import User
 from sqlalchemy.orm import Session
 from pyramid.threadlocal import get_current_registry
 import logging
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +28,16 @@ def verify_password(stored_password: str, password: str) -> bool:
 def create_token(user: User) -> str:
     jwt_secret_key, jwt_algorithm = get_jwt_config()
     expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # Expiración de 1 hora
+    logging.info(f"Expiracion: {expiration}")
     payload = {
-        "sub": user.id,  # ID del usuario como "sub" (subject)
-        "exp": expiration  # Expiración del token
+        "sub": str(user.id),  # ID del usuario como "sub" (subject)
+        "exp": expiration,  # Expiración del token
+        "name": user.name,  # Puedes agregar más datos si es necesario
+        "email": user.email
     }
-    token = jwt.PyJWT().encode(payload, jwt_secret_key, jwt_algorithm)  # Crea el token
+
+    # Codificación a bytes
+    token = jwt.encode(payload, jwt_secret_key, algorithm=jwt_algorithm)  # Crea el token
     return token
 
 # Función para obtener el usuario por correo electrónico
@@ -56,10 +62,30 @@ def login_user(db: Session, email: str, password: str):
     logger.info(f"Token generado correctamente para {email}")
     return token
 
-def verify_jwt(token):
-    config = get_current_registry().settings
-    jwt_secret_key = config.get('JWT_SECRET_KEY')
+
+def verify_jwt(token: str):
+    jwt_secret_key, jwt_algorithm = get_jwt_config()
     try:
-        return jwt.decode(token, jwt_secret_key, algorithms=["HS256"])
-    except jwt.ExpiredSignatureError:
-        return None
+        decoded_token = jwt.decode(token, jwt_secret_key, algorithms=[jwt_algorithm])
+        
+        # Verificar si el token tiene la propiedad 'sub', que es el identificador del usuario
+        if 'sub' not in decoded_token:
+            logging.warning("Token inválido, falta el subject")
+            return {"error": "Token inválido, falta el subject"}
+
+        return decoded_token  # Retornamos el payload decodificado
+
+    except ExpiredSignatureError:
+        logging.warning("Token expirado")
+        return {"error": "Token expirado"}
+    
+    except InvalidTokenError:
+        logging.warning("Token inválido")
+        return {"error": "Token inválido"}
+    
+    except Exception as e:
+        logging.exception(f"Error al verificar el token: {str(e)}")
+        return {"error": f"Error inesperado: {str(e)}"}
+
+    
+    

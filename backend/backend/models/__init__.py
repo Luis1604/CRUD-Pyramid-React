@@ -10,6 +10,7 @@ from .user import User
 from .order import Order
 from .product import Product
 from .order_product import OrderProduct
+from .user_ext import User_ext
 
 # Run ``configure_mappers`` after defining all of the models to ensure
 # all relationships can be setup.

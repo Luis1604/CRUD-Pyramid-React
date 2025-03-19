@@ -43,6 +43,13 @@ input {
     font-size: 1rem;
 }
 
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center; 
+    margin-top: 10px; 
+}
+
 button {
     width: 100%;
     padding: 12px;

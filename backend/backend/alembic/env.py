@@ -2,7 +2,7 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from backend.models.meta import Base
-from backend.models import user, order, product, order_product
+from backend.models import user, order, product, order_product,user_ext
 from alembic import context
 
 

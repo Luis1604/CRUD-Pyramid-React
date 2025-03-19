@@ -6,7 +6,6 @@ import ProductsPage from "./pages/ProductsPage";
 import OrdersPage from "./pages/OrdersPage";
 import AdminPage from "./pages/AdminPage";
 import LoginGooglePage from "./pages/LoginGooglePage";
-import RegisterGooglePage from "./pages/RegisterGooglePage";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
                     <Route path="/products" element={<ProductsPage />} />
                     <Route path="/orders" element={<OrdersPage />} />
                     <Route path="/loging" element={<LoginGooglePage />} />
-                    <Route path="/registerg" element={<RegisterGooglePage />} />
                 </Routes>
             </Router>
         </AuthProvider>
