@@ -1,106 +1,71 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 import "../styles/products.css";
-import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Asegúrate de instalar react-icons si no lo tienes
+import { useNavigate } from "react-router-dom";
 
 const ProductsPage = () => {
-    const [products, setProducts] = useState([]);
-    const [error, setError] = useState(null);
-    const [newProduct, setNewProduct] = useState({ name: "", description: "", price: "" });
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    
-
+    const { vrfToken, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get("http://localhost:6543/api/products");
-                setProducts(response.data);
-            } catch (error) {
-                console.error("Error al obtener productos:", error);
-                setError("No se pudieron cargar los productos. Intente nuevamente más tarde.");
+            if (!vrfToken()) {
+                console.log("Usuario no autenticado, redirigiendo...");
+                navigate("/");
+            } else {
+                console.log("Usuario autenticado en Productos");
             }
-        };
-        fetchProducts();
-    }, []);
+        }, [vrfToken, navigate]);
 
-    const handleModify = (id) => {
-        console.log(`Modificar producto con ID: ${id}`);
-    };
-
-    const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://localhost:6543/api/products/${id}`);
-            setProducts(products.filter(product => product.id !== id));
-        } catch (error) {
-            console.error("Error al eliminar producto:", error);
-            setError("No se pudo eliminar el producto.");
-        }
-    };
-
-    const handleAddProduct = async (e) => {
-        e.preventDefault();
-        if (!newProduct.name || !newProduct.description || !newProduct.price) {
-            setError("Todos los campos son obligatorios.");
-            return;
-        }
-        try {
-            const resp = await fetch("http://localhost:6543/api/products", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, description, price }),
-                mode: "cors",
-            });
-            setProducts([...products, resp.data]);
-            setNewProduct({ name: "Chocolate", description: "Chocolate blanco", price: "4" });
-            setError(null);
-        } catch (error) {
-            console.error("Error al agregar producto:", error);
-            setError("No se pudo agregar el producto.");
-        }
-    };
-
+    const data = [
+        { id: 1, name: 'Producto A', descr: 'Producto A', price: '$10' },
+        { id: 2, name: 'Producto B', descr: 'Producto B', price: '$15' },
+    ];
     return (
-        <div className="products-container">
-            <form className="register-box" onSubmit={handleAddProduct}>
-                <h2 className="title">Agregar Producto</h2>
-                <input type="text" name="name" placeholder="Nombre" value={newProduct.name} onChange={(e) => setName(e.target.value)} required />
-                <input type="text" name="description" placeholder="Descripción" value={newProduct.description} onChange={(e) => setDescription(e.target.value)} required />
-                <input type="number" name="price" placeholder="Precio" value={newProduct.price} onChange={(e) => setPrice(e.target.value)} required />
-                <button type="submit">Agregar Producto</button>
-            </form>
+        <>
+            <nav>
+                <div className="logo">Productos</div>
+                <ul>
+                    <li><a href="/admin">Administracíon</a></li>
+                    <li><a href="/register">Usuarios</a></li>
+                    <li><a href="/products">Productos</a></li>
+                    <li><a href="/orders">Órdenes</a></li>
+                    <li><a href="/" onClick={() => logout()} >Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+            <div className="products-container">
+                <div className="table-container">
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.id}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.descr}</td>
+                                    <td>{item.price}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <div className="button-container">
+                        <button className="action-button">Agregar</button>
+                        <button className="action-button">Editar</button>
+                        <button className="action-button">Eliminar</button>
+                    </div>
+                </div>
 
-            {error && <p className="error-message">{error}</p>}
+            </div>
+            <footer>
+                &copy; 2025 CRUD App - Todos los derechos reservados.
+            </footer>
+        </>
 
-            <table className="styled-table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Precio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((product) => (
-                        <tr key={product.id}>
-                            <td>{product.name}</td>
-                            <td>{product.description}</td>
-                            <td>${parseFloat(product.price).toFixed(2)}</td>
-                            <td className="button-group">
-                                <button className="modify-btn" onClick={() => handleModify(product.id)}>
-                                    <FaEdit /> <span>Modificar</span>
-                                </button>
-                                <button className="delete-btn" onClick={() => handleDelete(product.id)}>
-                                    <FaTrashAlt /> <span>Eliminar</span>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
     );
 };
 

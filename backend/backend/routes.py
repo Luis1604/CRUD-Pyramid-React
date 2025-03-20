@@ -15,7 +15,8 @@ def includeme(config):
 
     # Agregar rutas para login
     config.add_route('login', '/api/login') 
-    config.add_route('auth_google', '/api/auth_google') 
+    config.add_route('auth_google', '/api/auth_google')
+    config.add_route('two_steps', '/api/two_steps') 
 
     # Validacion de toke
     config.add_route('dashboard', '/api/dashboard') 

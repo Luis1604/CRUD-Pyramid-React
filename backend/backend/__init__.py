@@ -1,6 +1,6 @@
 from pyramid.config import Configurator
 from backend.routes import includeme
-
+import redis
 
 def main(global_config, **settings):
     """ Esta función retorna una aplicación Pyramid WSGI. """

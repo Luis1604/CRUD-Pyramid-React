@@ -2,10 +2,11 @@ import bcrypt
 import jwt
 import datetime
 from backend.models.user import User
+import logging
 from sqlalchemy.orm import Session
 from pyramid.threadlocal import get_current_registry
-import logging
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from cryptography.fernet import Fernet
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,21 @@ def get_jwt_config():
     jwt_secret_key = config.get('JWT_SECRET_KEY')
     jwt_algorithm = config.get('JWT_ALGORITHM')
     return jwt_secret_key, jwt_algorithm
+
+
+# Cifrar una contraseña
+def encrypt_password(password: str) -> bytes:
+    config = get_current_registry().settings
+    key = config.get('KEY')
+    cipher = Fernet(key)
+    return cipher.encrypt(password.encode())
+
+# Descifrar una contraseña
+def decrypt_password(encrypted_password: bytes) -> str:
+    config = get_current_registry().settings
+    key = config.get('KEY')
+    cipher = Fernet(key)
+    return cipher.decrypt(encrypted_password).decode()
 
 # Función para encriptar la contraseña
 def hash_password(password: str) -> str:

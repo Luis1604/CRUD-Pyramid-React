@@ -34,21 +34,36 @@ const AdminPage = () => {
     ];
 
     return (
-        <div className="admin-container">
-            <h2>Panel de Administración</h2>
-            <div className="admin-grid">
-                {options.map((option, index) => (
-                    <div 
-                        key={index} 
-                        className="admin-card" 
-                        onClick={() => handleOptionClick(option)}
-                    >
-                        <span className="admin-icon">{option.icon}</span>
-                        <h3>{option.label}</h3>
-                    </div>
-                ))}
+        <>
+            <nav>
+                <div className="logo">Panel de Administración</div>
+                <ul>
+                    <li><a href="/admin">Administracíon</a></li>
+                    <li><a href="/register">Usuarios</a></li>
+                    <li><a href="/products">Productos</a></li>
+                    <li><a href="/orders">Órdenes</a></li>
+                    <li><a href="/" onClick={() => logout()} >Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+            <div className="admin-container">
+                <div className="admin-grid">
+                    {options.map((option, index) => (
+                        <div 
+                            key={index} 
+                            className="admin-card" 
+                            onClick={() => handleOptionClick(option)}
+                        >
+                            <span className="admin-icon">{option.icon}</span>
+                            <h3>{option.label}</h3>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+            <footer>
+                &copy; 2025 CRUD App - Todos los derechos reservados.
+            </footer>
+
+        </>
     );
 };
 
