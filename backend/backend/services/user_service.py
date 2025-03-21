@@ -1,10 +1,12 @@
 from backend.models.user import User
 import logging
 import smtplib
+import redis
 from email.message import EmailMessage
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from pyramid_tm import transaction
+from pyramid.threadlocal import get_current_registry
 
 
 logger = logging.getLogger(__name__)
@@ -49,6 +51,24 @@ def delete_user(db: Session, user_id: int):
         return user
     return None
 
+def set_redisOpt(email: str, code:int):
+    try:   
+        config = get_current_registry().settings
+        redis_client = redis.StrictRedis(host=config.get('redis.host'), port=config.get('redis.port'), db=config.get('redis.db '), decode_responses=True)
+        redis_client.setex(f"totp:{email}", 300, code)
+        logger.info(f"Guardando código OTP en Redis")
+        return True
+    except Exception as e:
+        return False
+    
+def get_redisOpt(email: str):
+    try:   
+        config = get_current_registry().settings
+        redis_client = redis.StrictRedis(host=config.get('redis.host'), port=config.get('redis.port'), db=config.get('redis.db '), decode_responses=True)
+        logger.info(f"Obteniendo código OTP de Redis")
+        return redis_client.get(f"totp:{email}")
+    except Exception as e:
+        return None
 
 def send_email(recipient, code):
     """ Función para enviar un correo electrónico desde Pyramid. """
@@ -81,7 +101,6 @@ def send_email(recipient, code):
             </body>
         </html>
         """
-
 
     # Crear el mensaje de correo electrónico
     msg = EmailMessage()

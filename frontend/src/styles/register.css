@@ -1,94 +1,96 @@
 .register-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #3b82f6, #6d28d9);
-    text-align: center;
-    padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3b82f6, #6d28d9);
+  text-align: center;
+  padding: 20px;
 }
 
-.h2 {
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-    color: #515151;
-} 
+.h2-user {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #f7f7f7;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
 .register-box {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 350px;
+  max-width: 35%;
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
 }
 
 .error-message {
-    color: #e91e63;
-    font-size: 1rem;
-    margin-bottom: 1rem;
+  color: #e91e63;
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 .success-message {
-    color: #4caf50;
-    font-size: 1rem;
-    margin-bottom: 1rem;
+  color: #4caf50;
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
 .button-group {
-    display: flex;
-    gap: 10px;
-    justify-content: center; 
-    margin-top: 10px; 
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    background: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(52, 52, 52, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(52, 52, 52, 0.3);
 }
 
 /* Grupo de inputs */
 .input-group {
-    position: relative;
-    width: 100%;
-    margin-bottom: 1.5rem;
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 /* Inputs */
 .input-group input {
-    width: 100%;
-    padding: 12px 40px 12px 12px; /* Espacio para el ícono */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    display: block; /* Asegura que el input no se comporte como inline */
-    box-sizing: border-box; /* Evita que padding afecte el ancho */
+  width: 100%;
+  padding: 12px 40px 12px 12px; /* Espacio para el ícono */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: block; /* Asegura que el input no se comporte como inline */
+  box-sizing: border-box; /* Evita que padding afecte el ancho */
 }
 
 .input-group input:focus {
-    outline: none;
-    border-color: #6d28d9;
-    box-shadow: 0px 0px 8px rgba(109, 40, 217, 0.3);
+  outline: none;
+  border-color: #6d28d9;
+  box-shadow: 0px 0px 8px rgba(109, 40, 217, 0.3);
 }

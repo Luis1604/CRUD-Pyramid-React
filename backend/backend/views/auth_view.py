@@ -1,8 +1,7 @@
 from pyramid.view import view_config
-from pyramid.response import Response
 from pyramid.request import Request
 from pyramid.security import NO_PERMISSION_REQUIRED
-from backend.services.auth_service import login_user
+from backend.services.auth_service import login_user, create_response
 import logging
 import json
 
@@ -50,12 +49,3 @@ def login_view(request: Request):
         return create_response({"error": "Error interno del servidor"}, 500)
 
     
-def create_response(data, status_code):
-    response = Response(json.dumps(data), content_type="application/json; charset=utf-8", status=status_code)
-    response.headers.update({
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Allow-Credentials": "true"
-    })
-    return response

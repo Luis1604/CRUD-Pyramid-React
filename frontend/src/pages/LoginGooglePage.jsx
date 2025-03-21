@@ -12,15 +12,21 @@ const LoginGooglePage = () => {
     const [otpCode, setOtpCode] = useState("");
     const [otpRequired, setOtpRequired] = useState(false);
     const [mail, setMail] = useState(null);
+    const vrf = useCallback(() => !!vrfToken(), [vrfToken]);
 
-
-    // Redirigir si el usuario ya está autenticado
     useEffect(() => {
-        if (vrfToken()) {
-            console.log("Usuario autenticado con Google, redirigiendo...");
-            navigate("/admin");
-        }
-    }, [vrfToken, navigate]);
+        const timeout = setTimeout(() => {
+            if (vrf()) {
+                console.log("Usuario autenticado, redirigiendo...");
+                navigate("/admin");
+            }
+            else {
+                console.log("No logueado")
+            }
+        }, 1000);
+        return () => clearTimeout(timeout);
+    }, [vrf, navigate]);
+    
 
     // Manejo de éxito en autenticación con Google
     const handleSuccess = useCallback(async (response) => {
@@ -46,8 +52,7 @@ const LoginGooglePage = () => {
                     console.log("Se requiere OTP para continuar");
                     setMail(data.email);
                     setOtpRequired(true);
-                }else{
-                    localStorage.setItem("token", data.token);
+                } else {
                     login(data.token);
                     console.log("Login con Google exitoso sin 2FK. Redirigiendo...");
                     navigate("/admin");
@@ -61,22 +66,21 @@ const LoginGooglePage = () => {
     }, [login, navigate]);
 
     const handleOtpSubmit = async (response) => {
-        if (otpCode.trim()==="") {  
+        if (otpCode.trim() === "") {
             console.error("Código de verificación vacío");
             return;
         }
         try {
-            console.warn("Enviando 2fa al backend...");
             if (mail === null) {
                 console.error("Error en la verificación de 2FA: no se encontró el correo electrónico");
                 return;
-            }else{
+            } else {
                 const res = await fetch("http://localhost:6543/api/two_steps", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ email: mail , otp_code: otpCode}),
+                    body: JSON.stringify({ email: mail, otp_code: otpCode }),
                     mode: "cors",
                     credentials: "include",
                 });
@@ -89,7 +93,6 @@ const LoginGooglePage = () => {
                 const data = await res.json();
 
                 if (data.success) {
-                    localStorage.setItem("token", data.token);
                     login(data.token);
                     console.log("Autenticación 2FA exitosa. Redirigiendo al dashboard...");
                     navigate("/admin");
@@ -97,7 +100,7 @@ const LoginGooglePage = () => {
                     console.error("Código de verificación incorrecto");
                 }
             }
-            
+
         } catch (error) {
             console.error("Error en la verificación de 2FA:", error);
         }
@@ -106,23 +109,48 @@ const LoginGooglePage = () => {
     return (
         <div className="login-container">
             <div className="login-box">
-                <h2 className="h2">Iniciar Sesión con Google</h2>
+
                 <form>
                     {!otpRequired ? (
-                        <GoogleOAuthProvider clientId={clientId}>
-                            <GoogleLogin onSuccess={handleSuccess} onError={() => console.log("Error al iniciar sesión con Google")} useOneTap />
-                        </GoogleOAuthProvider>
+                        <>
+                            <h2 className="h2-google">Iniciar Sesión con Google</h2>
+
+                            <GoogleOAuthProvider 
+                                clientId={clientId}
+                                auto_select={true}
+                                prompt="consent"
+                                onScriptLoadSuccess={() => console.log("Google SDK cargado correctamente")}
+                                onScriptLoadError={() => console.error("Error al cargar el SDK de Google")}
+                            >
+                                <GoogleLogin
+                                    onSuccess={handleSuccess}
+                                    onError={() => console.log("Error al iniciar sesión con Google")}
+                                    useOneTap
+                                    theme="filled_blue"
+                                    size="large"         
+                                    text="signin_with"
+                                />
+                            </GoogleOAuthProvider>
+                        </>
                     ) : (
-                        <div>
-                            <p>Ingrese su código de verificación</p>
+                        <>
+                            <p className="h2-google">Ingrese su código de verificación</p>
+                            <p className="code-duration">El código es válido por 5 minutos.</p>
                             <input
+                                className="input-code"
                                 type="text"
-                                placeholder="Código de verificación"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                maxLength="6"
+                                placeholder="------"
                                 value={otpCode}
-                                onChange={(e) => setOtpCode(e.target.value)}
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/\D/g, ""); // Solo números
+                                    setOtpCode(value);
+                                }}
                             />
-                            <button type="button" onClick={handleOtpSubmit}>Verificar Código</button>
-                        </div>
+                            <button className="button" type="button" onClick={handleOtpSubmit}>Verificar Código</button>
+                        </>
                     )}
                 </form>
             </div>

@@ -8,19 +8,21 @@ import { AuthContext } from "../context/AuthContext";
 const LoginPage = () => {
     const { login, vrfToken } = useContext(AuthContext);
     const navigate = useNavigate();
-    
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    // Redirigir si el usuario ya está autenticado
+    const vrf = useCallback(() => !!vrfToken(), [vrfToken]); 
+    
     useEffect(() => {
-        if (vrfToken()) {
-            console.log("Usuario autenticado, redirigiendo...");
-            navigate("/admin");
-        }
-    }, [vrfToken, navigate]);
+        const timeout = setTimeout(() => {
+            if (vrf()) {
+                console.log("Usuario autenticado, redirigiendo...");
+                navigate("/admin");
+            }
+        }, 1000);
+        return () => clearTimeout(timeout);
+    }, [vrf, navigate]);
 
     // Manejo de cambio en inputs
     const handleChange = (e) => {
@@ -84,7 +86,7 @@ const LoginPage = () => {
                         </span>
                     </div>
 
-                    <button type="submit" disabled={isLoading}>
+                    <button className="button" type="submit" disabled={isLoading}>
                         {isLoading ? "Cargando..." : "Ingresar"}
                     </button>
                 </form>

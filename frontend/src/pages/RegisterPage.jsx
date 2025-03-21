@@ -85,7 +85,7 @@ const RegisterPage = () => {
             </nav>
             <div className="register-container">
                 <div className="register-box">
-                    <h2 className="h2">Registro de usuario</h2>
+                    <h2 className="h2-user">Registro de usuario</h2>
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
                     <form onSubmit={handleRegister} noValidate>

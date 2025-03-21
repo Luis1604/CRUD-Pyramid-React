@@ -13,12 +13,13 @@
 
 /* Contenedor principal */
 .homepage-content {
-  max-width: 500px;
+  max-width: 50%;
   padding: 40px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  align-items: center;
 }
 
 /* Título */
@@ -27,6 +28,8 @@
   font-weight: 800;
   margin-bottom: 10px;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  width: 99%;
+  flex: auto;
 }
 
 /* Descripción */
@@ -44,13 +47,14 @@
   background: white;
   color: #3b82f6;
   border: none;
-  border-radius: 30px;
+  border-radius: 18px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 30 30px; 
+  margin-left: 15%;
+  width: 70%;
+  margin-bottom: 12px;
 }
 
 .homepage-button:hover {

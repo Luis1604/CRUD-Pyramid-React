@@ -6,16 +6,20 @@ import React, { useContext, useEffect, useCallback } from "react";
 const AdminPage = () => {
     const { vrfToken, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-
-    // Verifica la autenticación
+    const vrf = useCallback(() => !!vrfToken(), [vrfToken]); 
+    
     useEffect(() => {
-        if (!vrfToken()) {
-            console.log("Usuario no autenticado, redirigiendo...");
-            navigate("/");
-        } else {
-            console.log("Usuario autenticado en admin");
-        }
-    }, [vrfToken, navigate]);
+        const interval = setInterval(() => {
+            if (!vrf()) {
+                console.log("Usuario no autenticado, redirigiendo...");
+                navigate("/");
+            }else{
+                console.log("Usuario autenticado Admin");
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [vrf, navigate]);
 
     // Manejo de clic en las opciones del panel
     const handleOptionClick = useCallback((option) => {

@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useCallback } from "react";
 
 // Crear el contexto de autenticación
 export const AuthContext = createContext();
-
+const TOKEN_EXPIRATION_TIME = 3600 * 1000; // 1 hora
 // Crear el proveedor de autenticación
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     const login = (token) => {
         localStorage.setItem("token", token);
         fetchUserData(token);
+        setTimeout(() => logout(), TOKEN_EXPIRATION_TIME);
     };
 
     // Función para cerrar sesión

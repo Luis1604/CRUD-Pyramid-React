@@ -3,6 +3,10 @@ import jwt
 import datetime
 from backend.models.user import User
 import logging
+import base64
+import pyotp
+import json
+from pyramid.response import Response
 from sqlalchemy.orm import Session
 from pyramid.threadlocal import get_current_registry
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
@@ -102,6 +106,25 @@ def verify_jwt(token: str):
     except Exception as e:
         logging.exception(f"Error al verificar el token: {str(e)}")
         return {"error": f"Error inesperado: {str(e)}"}
-
     
+def otp_encrypt():
+    opt = pyotp.random_base32()
+    return base64.urlsafe_b64encode(encrypt_password(opt)).decode()
+
+def otp_decrypt(crypt: str):
+    descrypt = base64.urlsafe_b64decode(crypt.encode())
+    decoded_key = decrypt_password(descrypt)
+    totp = pyotp.TOTP(decoded_key, interval=60, digits=6)
+    return totp.now()
+
+
+def create_response(data, status_code):
+    response = Response(json.dumps(data), content_type="application/json; charset=utf-8", status=status_code)
+    response.headers.update({
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Credentials": "true"
+    })
+    return response
     
